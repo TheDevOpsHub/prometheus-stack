@@ -17,3 +17,7 @@ docker-compose up -d
 - Alertmanager: http://localhost:9093
 - cAdvisor: http://localhost:8080
 - Node Exporter: http://localhost:9100
+
+## Grafana dashboard
+
+- https://grafana.com/grafana/dashboards/1860-node-exporter-full/
