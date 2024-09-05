@@ -48,13 +48,20 @@ services:
     networks:
       - monitoring
 
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    command:
+      - '--path.rootfs=/host'
+    network_mode: host
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - '/:/host:ro,rslave'
     ports:
       - "9100:9100"
-    networks:
-      - monitoring
+    # networks:
+    #   - monitoring
 
 networks:
   monitoring:
