@@ -1,0 +1,47 @@
+groups:
+  - name: cadvisor-alerts
+    rules:
+      - alert: HighContainerCPUUsage
+        expr: sum(rate(container_cpu_usage_seconds_total[1m])) by (name) > 0.9
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High CPU usage for container {{ $labels.name }}"
+          description: "The container {{ $labels.name }} is using more than 90% of CPU."
+
+      - alert: HighContainerMemoryUsage
+        expr: sum(container_memory_usage_bytes / container_spec_memory_limit_bytes) by (name) > 0.85
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High memory usage for container {{ $labels.name }}"
+          description: "The container {{ $labels.name }} is using more than 85% of its memory limit."
+
+      - alert: ContainerOOMKill
+        expr: sum(rate(container_memory_failures_total[1m])) by (name) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container OOM kill detected for {{ $labels.name }}"
+          description: "The container {{ $labels.name }} has been killed due to out-of-memory (OOM)."
+
+      - alert: HighDiskIO
+        expr: sum(rate(container_fs_reads_bytes_total[1m]) + rate(container_fs_writes_bytes_total[1m])) by (name) > 104857600
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High disk I/O for container {{ $labels.name }}"
+          description: "The container {{ $labels.name }} has high disk I/O, reading or writing more than 100 MB/min."
+
+      - alert: ContainerRestart
+        expr: increase(container_restart_count[5m]) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container {{ $labels.name }} has restarted frequently"
+          description: "The container {{ $labels.name }} has restarted more than 2 times in the last 5 minutes."
