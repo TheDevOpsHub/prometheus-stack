@@ -2,6 +2,11 @@
 
 Docker compose for the Prometheus monitoring stack
 
+## Architecture
+
+Doc: https://prometheus.io/docs/introduction/overview/
+![architecture](https://prometheus.io/assets/architecture.png)
+
 ## Running the Stack
 
 ### Start the monitoring stack with:
